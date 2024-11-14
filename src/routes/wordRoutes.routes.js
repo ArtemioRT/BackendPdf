@@ -1,13 +1,12 @@
 import mammoth from "mammoth";
 import { Router } from "express";
-import { uploadToDisk, upload } from "../services/uploader/uploader.js";
+import { upload } from "../services/uploader/uploader.js";
 import { generateSafeKey } from "../services/utils/generateSafeKey.js";
 import { verifyEmbeddingDimension } from "../services/utils/verifyEmmbedingDimension.js"
 import { client } from "../services/azureCredentials/azure.credentials.js";
 import WordExtractor from 'word-extractor'
 import { openaiEmbeddings } from "../services/openIA/openAI.config.js";
 import { config } from "../controllers/config/config.js";
-import { convertDocToDocx } from "../services/utils/convertDocDocx.js";
 import { logger } from "../services/log/logger.js";
 
 const wordRoutes = Router();
