@@ -16,6 +16,7 @@ dotenv.config({ path: clOptions.mode === 'prod' ? '.env.prod' : '.env.devel' });
 export const config = {
     KEY: process.env.KEY,
     PORT: process.env.PORT,
+    DIRNAME: url.fileURLToPath(new URL('../../', import.meta.url)),
     DIRNAME_LOG: url.fileURLToPath(new URL('../../services/log/register', import.meta.url)),
     get UPLOAD_DIR() { return `${this.DIRNAME}/public/pdf` },
     MODE: process.env.MODE,

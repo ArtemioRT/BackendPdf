@@ -6,13 +6,11 @@ import { PDFExtract } from "pdf.js-extract";
 import { client } from "../services/azureCredentials/azure.credentials.js";
 import { openaiEmbeddings } from "../services/openIA/openAI.config.js";
 import { config } from "../controllers/config/config.js";
-import { convertDocToDocx } from "../services/utils/convertDocDocx.js";
 import { logger } from "../services/log/logger.js";
 
 
 
 const pdfRoutes = Router();
-
 
 const processedFiles = new Set(); // Registro de archivos procesados
 

@@ -28,7 +28,8 @@
     "pdf.js-extract": "^0.2.1",
     "socket.io": "^4.8.1",
     "tiktoken": "^1.0.17",
-    "winston": "^3.16.0"
+    "winston": "^3.16.0",
+    "word-extractor": "^1.0.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
