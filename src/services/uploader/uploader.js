@@ -1,13 +1,5 @@
 import multer from "multer";
-import { config } from "../../controllers/config/config.js";
 
-const storge = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, config.UPLOAD_DIR);
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname)
-    }
-})
 
-export const uploader = multer({ storage: storge })
+const storage = multer.memoryStorage();
+export const upload = multer({ storage: storage, limits: { fileSize: 30 * 1024 * 1024 } }); // Límite de 30 MB

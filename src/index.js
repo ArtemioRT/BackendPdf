@@ -3,7 +3,7 @@ import { config } from "./controllers/config/config.js";
 import { logger } from "./services/log/logger.js";
 import { pdfRoutes } from "./routes/pdf.routes.js";
 import { generalConfigSocket } from "./services/socket.io/global.socket.js";
-import { wordRoutes } from "./routes/pdf.routes.js";
+import { wordRoutes } from "./routes/wordRoutes.routes.js";
 import cors from "cors";
 let socketServer;
 

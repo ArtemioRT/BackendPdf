@@ -1,25 +1,19 @@
+import mammoth from "mammoth";
 import { Router } from "express";
 import { upload } from "../services/uploader/uploader.js";
 import { generateSafeKey } from "../services/utils/generateSafeKey.js";
-import { verifyEmbeddingDimension } from "../services/utils/verifyEmmbedingDimension.js";
-import { PDFExtract } from "pdf.js-extract";
+import { verifyEmbeddingDimension } from "../services/utils/verifyEmmbedingDimension.js"
 import { client } from "../services/azureCredentials/azure.credentials.js";
 import { openaiEmbeddings } from "../services/openIA/openAI.config.js";
 import { config } from "../controllers/config/config.js";
 import { convertDocToDocx } from "../services/utils/convertDocDocx.js";
 import { logger } from "../services/log/logger.js";
 
-
-
-const pdfRoutes = Router();
-
-
-const processedFiles = new Set(); // Registro de archivos procesados
-
-pdfRoutes.post('/sendPdf', upload.single('pdfFile'), async (req, res) => {
+const wordRoutes = Router();
+wordRoutes.post('/sendWord', upload.single('wordFile'), async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ error: "Se requiere un archivo PDF" });
+            return res.status(400).json({ error: "Se requiere un archivo Word" });
         }
 
         const fileName = req.file.originalname;
@@ -27,29 +21,38 @@ pdfRoutes.post('/sendPdf', upload.single('pdfFile'), async (req, res) => {
             return res.status(400).json({ error: "Este archivo ya ha sido procesado" });
         }
 
-        const pdfExtract = new PDFExtract();
-        const pdfBuffer = req.file.buffer;
-        const data = await pdfExtract.extractBuffer(pdfBuffer);
+        let extractedText = '';
+        if (fileName.endsWith('.docx')) {
+            // Si el archivo es .docx, extraemos el texto directamente
+            const { value } = await mammoth.extractRawText({ buffer: req.file.buffer });
+            extractedText = value;
+        } else if (fileName.endsWith('.doc')) {
+            // Si el archivo es .doc, lo convertimos primero a .docx
+            const docxBuffer = await convertDocToDocx(req.file.buffer);
+            const { value } = await mammoth.extractRawText({ buffer: docxBuffer });
+            extractedText = value;
+        } else {
+            return res.status(400).json({ error: "Tipo de archivo no soportado" });
+        }
 
-        const totalPages = data.pages.length;
+        if (!extractedText) {
+            return res.status(400).json({ error: "No se pudo extraer texto del archivo Word" });
+        }
+
         const chunkSize = 2000;
         const chunkOverlap = 150;
-        const maxPagesPerBatch = 20;
 
         const chunks = [];
         const documents = [];
 
-        for (let i = 0; i < totalPages; i += maxPagesPerBatch) {
-            const pageBatch = data.pages.slice(i, i + maxPagesPerBatch);
-            const batchText = pageBatch.map(page => page.content.map(item => item.str).join(' ')).join(' ');
+        // Dividir el texto extraído en trozos más pequeños
+        for (let startIndex = 0; startIndex < extractedText.length; startIndex += chunkSize - chunkOverlap) {
+            chunks.push(extractedText.slice(startIndex, startIndex + chunkSize));
+        }
 
-            for (let startIndex = 0; startIndex < batchText.length; startIndex += chunkSize - chunkOverlap) {
-                chunks.push(batchText.slice(startIndex, startIndex + chunkSize));
-            }
-
-            for (const page of pageBatch) {
-                documents.push({ pageNumber: page.pageNumber, text: page.content.map(item => item.str).join(' ') });
-            }
+        // Crear documentos con el texto extraído
+        for (let i = 0; i < chunks.length; i++) {
+            documents.push({ pageNumber: i + 1, text: chunks[i] });
         }
 
         const embeddings = await openaiEmbeddings.embedDocuments(chunks);
@@ -77,10 +80,10 @@ pdfRoutes.post('/sendPdf', upload.single('pdfFile'), async (req, res) => {
             origin: config.PORT,
             chunks: JSON.stringify(embeddings),
             documents: JSON.stringify(documents),
-            message: `${batch.results.length} documentos cargados correctamente en openAI embedings`
+            message: `${batch.results.length} documentos cargados correctamente en openAI embeddings`
         });
     } catch (err) {
-        logger.error("Error al procesar el archivo PDF:", err);
+        logger.error("Error al procesar el archivo Word:", err);
         res.status(500).json({
             error: 'Error interno del servidor',
             details: err.message,
@@ -89,4 +92,4 @@ pdfRoutes.post('/sendPdf', upload.single('pdfFile'), async (req, res) => {
     }
 });
 
-export { pdfRoutes };
+export { wordRoutes };
