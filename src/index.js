@@ -3,6 +3,7 @@ import { config } from "./controllers/config/config.js";
 import { logger } from "./services/log/logger.js";
 import { pdfRoutes } from "./routes/pdf.routes.js";
 import { generalConfigSocket } from "./services/socket.io/global.socket.js";
+import { wordRoutes } from "./routes/pdf.routes.js";
 import cors from "cors";
 let socketServer;
 
@@ -17,6 +18,7 @@ const httpServer = app.listen(config.PORT, async () => {
 
     //Get
     app.use('/api', pdfRoutes);
+    app.use('/api', wordRoutes);
     // app.use('/api', embeding);
 
 
