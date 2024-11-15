@@ -1,7 +1,6 @@
 import mammoth from "mammoth";
 import { Router } from "express";
 import { upload } from "../services/uploader/uploader.js";
-import { generateSafeKey } from "../services/utils/generateSafeKey.js";
 import { verifyEmbeddingDimension } from "../services/utils/verifyEmmbedingDimension.js"
 import { client } from "../services/azureCredentials/azure.credentials.js";
 import { verifyRequiredEmmbeding } from "../services/utils/verifyBodyEmmbeding.js";
