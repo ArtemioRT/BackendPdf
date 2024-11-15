@@ -11,7 +11,7 @@ import { logger } from "../services/log/logger.js";
 
 const wordRoutes = Router();
 const processedFiles = new Set();
-wordRoutes.post('/sendWord', verifyRequiredEmmbeding(['uniqueid', 'FileName', 'Folder', 'archivoid']), upload.single('wordFile'), async (req, res) => {
+wordRoutes.post('/sendWord', upload.single('wordFile'), verifyRequiredEmmbeding(['uniqueid', 'FileName', 'Folder', 'archivoid']), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: "Se requiere un archivo Word" });
@@ -62,7 +62,7 @@ wordRoutes.post('/sendWord', verifyRequiredEmmbeding(['uniqueid', 'FileName', 'F
             const embedding = verifyEmbeddingDimension(embeddings[index]);
             return {
                 '@search.action': 'upload',
-                uniqueid: req.body.uniqueid,
+                uniqueid: req.body.FileName,
                 FileName: req.body.FileName,
                 Chunk: chunk,
                 Embedding: embedding,
