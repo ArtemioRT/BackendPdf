@@ -1,6 +1,6 @@
 import { config } from "../../controllers/config/config.js";
 import { logger } from "../log/logger.js";
-export const verifyRequiredBodyChat = (requiredFields) => {
+export const verifyRequiredEmmbeding = (requiredFields) => {
     return (req, res, next) => {
         if (typeof req.body !== 'object' || req.body === null) {
             return res.status(400).send({ origin: config.PORT, payload: 'Invalid request body', requiredFields });

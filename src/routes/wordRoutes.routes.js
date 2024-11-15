@@ -4,6 +4,7 @@ import { upload } from "../services/uploader/uploader.js";
 import { generateSafeKey } from "../services/utils/generateSafeKey.js";
 import { verifyEmbeddingDimension } from "../services/utils/verifyEmmbedingDimension.js"
 import { client } from "../services/azureCredentials/azure.credentials.js";
+import { verifyRequiredEmmbeding } from "../services/utils/verifyBodyEmmbeding.js";
 import WordExtractor from 'word-extractor'
 import { openaiEmbeddings } from "../services/openIA/openAI.config.js";
 import { config } from "../controllers/config/config.js";
@@ -11,7 +12,7 @@ import { logger } from "../services/log/logger.js";
 
 const wordRoutes = Router();
 const processedFiles = new Set();
-wordRoutes.post('/sendWord', upload.single('wordFile'), async (req, res) => {
+wordRoutes.post('/sendWord', verifyRequiredEmmbeding(['uniqueid', 'FileName', 'Folder', 'archivoid']), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: "Se requiere un archivo Word" });
@@ -62,12 +63,12 @@ wordRoutes.post('/sendWord', upload.single('wordFile'), async (req, res) => {
             const embedding = verifyEmbeddingDimension(embeddings[index]);
             return {
                 '@search.action': 'upload',
-                uniqueid: generateSafeKey(fileName, index),
-                FileName: generateSafeKey(fileName, index),
+                uniqueid: req.body.uniqueid,
+                FileName: req.body.FileName,
                 Chunk: chunk,
                 Embedding: embedding,
-                Folder: 'uploaded_files',
-                archivoid: generateSafeKey(fileName, index)
+                Folder: req.body.Folder,
+                archivoid: req.body.archivoid
             };
         });
 
