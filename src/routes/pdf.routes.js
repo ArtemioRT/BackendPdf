@@ -14,7 +14,7 @@ const pdfRoutes = Router();
 
 const processedFiles = new Set(); // Registro de archivos procesados
 
-pdfRoutes.post('/sendPdf', verifyRequiredEmmbeding(['uniqueid', 'FileName', 'Folder', 'archivoid']), upload.single('P'), async (req, res) => {
+pdfRoutes.post('/sendPdf', verifyRequiredEmmbeding(['uniqueid', 'FileName', 'Folder', 'archivoid']), upload.single('pdfFile'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: "Se requiere un archivo PDF" });
