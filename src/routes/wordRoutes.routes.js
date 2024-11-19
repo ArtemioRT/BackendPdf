@@ -3,7 +3,6 @@ import { Router } from "express";
 import { upload } from "../services/uploader/uploader.js";
 import { verifyEmbeddingDimension } from "../services/utils/verifyEmmbedingDimension.js"
 import { client } from "../services/azureCredentials/azure.credentials.js";
-import { verifyRequiredEmmbeding } from "../services/utils/verifyBodyEmmbeding.js";
 import WordExtractor from 'word-extractor'
 import { openaiEmbeddings } from "../services/openIA/openAI.config.js";
 import { config } from "../controllers/config/config.js";
@@ -62,7 +61,7 @@ wordRoutes.post('/sendWord', upload.single('wordFile'), async (req, res) => {
             const embedding = verifyEmbeddingDimension(embeddings[index]);
             return {
                 '@search.action': 'upload',
-                uniqueid: req.body.FileName,
+                uniqueid: `${req.body.FileName}${index}`,
                 FileName: req.body.FileName,
                 Chunk: chunk,
                 Embedding: embedding,

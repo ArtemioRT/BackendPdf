@@ -7,7 +7,7 @@ import { client } from "../services/azureCredentials/azure.credentials.js";
 import { openaiEmbeddings } from "../services/openIA/openAI.config.js";
 import { config } from "../controllers/config/config.js";
 import { logger } from "../services/log/logger.js";
-import { verifyRequiredEmmbeding } from "../services/utils/verifyBodyEmmbeding.js";
+// import { verifyRequiredEmmbeding } from "../services/utils/verifyBodyEmmbeding.js";
 
 
 const pdfRoutes = Router();
@@ -55,7 +55,7 @@ pdfRoutes.post('/sendPdf', upload.single('pdfFile'), async (req, res) => {
             const embedding = verifyEmbeddingDimension(embeddings[index]);
             return {
                 '@search.action': 'upload',
-                uniqueid: req.body.FileName,
+                uniqueid: `${req.body.FileName}${index}`,
                 FileName: req.body.FileName,
                 Chunk: chunk,
                 Embedding: embedding,
