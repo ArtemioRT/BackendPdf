@@ -61,7 +61,7 @@ wordRoutes.post('/sendWord', upload.single('wordFile'), async (req, res) => {
             const embedding = verifyEmbeddingDimension(embeddings[index]);
             return {
                 '@search.action': 'upload',
-                uniqueid: `${req.body.FileName}${index}`,
+                uniqueid: `${req.body.archivoid}${index}`,
                 FileName: req.body.FileName,
                 Chunk: chunk,
                 Embedding: embedding,
