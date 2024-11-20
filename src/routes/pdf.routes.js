@@ -21,9 +21,9 @@ pdfRoutes.post('/sendPdf', upload.single('pdfFile'), async (req, res) => {
         }
 
         const fileName = req.file.originalname;
-        if (processedFiles.has(fileName)) {
-            return res.status(400).json({ error: "Este archivo ya ha sido procesado" });
-        }
+        // if (processedFiles.has(fileName)) {
+        //     return res.status(400).json({ error: "Este archivo ya ha sido procesado" });
+        // }
 
         const pdfExtract = new PDFExtract();
         const pdfBuffer = req.file.buffer;

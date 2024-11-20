@@ -16,9 +16,9 @@ wordRoutes.post('/sendWord', upload.single('wordFile'), async (req, res) => {
             return res.status(400).json({ error: "Se requiere un archivo Word" });
         }
         const fileName = req.file.originalname;
-        if (processedFiles.has(fileName)) {
-            return res.status(400).json({ error: "Este archivo ya ha sido procesado" });
-        }
+        // if (processedFiles.has(fileName)) {
+        //     return res.status(400).json({ error: "Este archivo ya ha sido procesado" });
+        // }
 
         let extractedText = '';
         if (fileName.endsWith('.docx')) {
