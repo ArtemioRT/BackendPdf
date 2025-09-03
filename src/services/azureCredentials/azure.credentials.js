@@ -2,7 +2,7 @@ import { SearchClient, AzureKeyCredential } from "@azure/search-documents";
 import { config } from "../../controllers/config/config.js";
 
 
-const endpoint = "https://alfa-ai-search.search.windows.net";
-const apiKey = `${config.AZURE_KEY}`;
-const indexName = "alfa_bot";
+const endpoint = config.AZURE_SEARCH_ENDPOINT;
+const apiKey = config.AZURE_SEARCH_KEY;
+const indexName = config.AZURE_SEARCH_INDEX_NAME;
 export const client = new SearchClient(endpoint, indexName, new AzureKeyCredential(apiKey));

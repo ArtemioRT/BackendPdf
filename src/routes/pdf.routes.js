@@ -4,7 +4,7 @@ import { upload } from "../services/uploader/uploader.js";
 import { verifyEmbeddingDimension } from "../services/utils/verifyEmmbedingDimension.js";
 import { PDFExtract } from "pdf.js-extract";
 import { client } from "../services/azureCredentials/azure.credentials.js";
-import { openaiEmbeddings } from "../services/openIA/openAI.config.js";
+import { getEmbeddings } from "../services/openIA/openAI.config.js";
 import { config } from "../controllers/config/config.js";
 import { logger } from "../services/log/logger.js";
 // import { verifyRequiredEmmbeding } from "../services/utils/verifyBodyEmmbeding.js";
@@ -50,7 +50,7 @@ pdfRoutes.post('/sendPdf', upload.single('pdfFile'), async (req, res) => {
             }
         }
 
-        const embeddings = await openaiEmbeddings.embedDocuments(chunks);
+const embeddings = await getEmbeddings(chunks);
         const azureDocuments = chunks.map((chunk, index) => {
             const embedding = verifyEmbeddingDimension(embeddings[index]);
             return {
