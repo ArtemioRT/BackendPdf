@@ -66,7 +66,8 @@ wordRoutes.post('/sendWord', upload.single('wordFile'), async (req, res) => {
                 Chunk: chunk,
                 Embedding: embedding,
                 Folder: req.body.Folder,
-                archivoid: req.body.archivoid
+                archivoid: req.body.archivoid,
+                Estado: "Nuevo"
             };
         });
 
