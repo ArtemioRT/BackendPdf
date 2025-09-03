@@ -14,8 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@azure/search-documents": "^12.1.0",
     "@azure/openai": "^2.0.0",
+    "@azure/search-documents": "^12.1.0",
     "axios": "^1.7.7",
     "commander": "^12.1.0",
     "cors": "^2.8.5",
@@ -23,6 +23,7 @@
     "express": "^4.21.1",
     "mammoth": "^1.8.0",
     "multer": "^1.4.5-lts.1",
+    "openai": "^5.19.1",
     "pdf.js-extract": "^0.2.1",
     "punycode": "^2.3.1",
     "punycode.js": "^2.3.1",
